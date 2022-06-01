@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+  stack<int>st;
+  
+ //topological sorting 
+void dfs( vector<pair<int,int>>adj[],vector<bool>&vis,int s){
+    vis[s]=true;
+  for(auto x:adj[s]){
+      int a=x.first;
+      if(vis[a]==false)
+      dfs(adj,vis,a);
+  }
+  
+  st.push(s);
+    
+}
+
+
+//update distance
+void update(vector<pair<int,int>>adj[], vector<int>&dis,int v){
+for(int j=0;j<v;j++){
+    int i=st.top();
+    st.pop();
+    
+    if(i==0)
+        dis[i]=0;
+    
+    for(auto x:adj[i]){
+        int node=x.first;
+        int weight=x.second;
+        if(dis[node]==INT_MAX){
+            dis[node]=weight+dis[i];
+        }
+        else{
+            dis[node]=min(dis[node],dis[i]+weight);
+        }
+        
+        
+    }
+    }
+}
+
+
+
+int main(){
+    
+ int v,e;
+ cin>>v>>e;
+ 
+ vector<pair<int,int>>adj[v];
+ 
+ for(int i=0;i<e;i++){
+     int u,v,wt;
+     cin>>u>>v>>wt;
+   adj[u].push_back({v,wt});  
+ }
+    
+   
+vector<bool>vis(v,false);   
+ vector<int>dis(v,INT_MAX);  
+  
+dfs(adj,vis,0);
+ 
+update(adj,dis,v); 
+ 
+ 
+ for(int i=0;i<v;i++){
+     cout<<dis[i]<<" ";
+ }
+
+    
+    return 0;
+}
